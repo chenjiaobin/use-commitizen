@@ -6,23 +6,6 @@
 
 本项目是一个基于Vue.js 3的示例项目，主要目的是演示如何使用Commitizen工具来规范化Git提交信息。通过使用Commitizen，可以确保团队中的每个开发者都遵循统一的提交信息格式，提高代码仓库的可维护性。
 
-## ✨ 功能特性
-
-- 🚀 基于Vue.js 3框架开发
-- 📝 集成Commitizen工具
-- 🔧 使用Conventional Changelog规范
-- 🎯 自动化的提交信息格式化
-- 📦 完整的项目配置
-
-## 🛠️ 技术栈
-
-- **前端框架**: Vue.js 3
-- **构建工具**: Vue CLI
-- **代码规范**: ESLint
-- **提交规范**: Commitizen + cz-conventional-changelog
-- **包管理**: npm/yarn
-
-
 ## 📝 Git提交规范
 
 本项目使用Commitizen工具来规范化Git提交信息。提交信息遵循[Conventional Commits](https://www.conventionalcommits.org/)规范。
@@ -91,6 +74,45 @@ feat: 添加用户登录功能
 
 Closes #123
 ```
+
+### 代码检查
+```bash
+npm run lint
+# 或者使用 yarn
+yarn lint
+```
+
+### 生成变更日志
+
+```bash
+# 增量更新变更日志
+npm run changelog
+
+# 重新生成完整的变更日志
+npm run changelog:first
+```
+
+### 发布新版本
+
+```bash
+# 发布补丁版本 (0.1.0 -> 0.1.1)
+npm run release:patch
+
+# 发布次要版本 (0.1.0 -> 0.2.0)
+npm run release:minor
+
+# 发布主要版本 (0.1.0 -> 1.0.0)
+npm run release:major
+```
+
+发布流程会自动执行以下步骤：
+1. 检查工作目录是否干净
+2. 拉取最新代码
+3. 运行测试和构建
+4. 更新版本号
+5. 生成变更日志
+6. 提交更改并创建标签
+7. 推送到远程仓库
 
 ## 🛡️ 提交校验自动化（Husky + Commitlint）
 
@@ -161,6 +183,42 @@ git commit -m "abc"
 ```
 会被自动拦截并提示格式错误，只有符合规范的提交信息才能成功提交。
 
+## 📋 变更日志生成
+
+本项目使用conventional-changelog来自动生成变更日志，基于Git提交信息自动分类和格式化。
+
+### 变更日志格式
+
+生成的变更日志会按照以下格式组织：
+
+- **Features**: 新功能
+- **Bug Fixes**: 错误修复
+- **Breaking Changes**: 破坏性变更
+- **Documentation**: 文档更新
+- **Performance**: 性能优化
+- **Refactoring**: 代码重构
+- **Tests**: 测试相关
+- **Chores**: 构建过程或辅助工具的变动
+
+### 配置说明
+
+在`package.json`中配置了changelog生成脚本：
+
+```json
+{
+  "scripts": {
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "changelog:first": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+  }
+}
+```
+
+参数说明：
+- `-p angular`: 使用angular预设格式
+- `-i CHANGELOG.md`: 输入文件
+- `-s`: 静默模式
+- `-r 0`: 从头开始生成（仅用于changelog:first）
+
 ## 🤝 贡献指南
 
 1. Fork 本仓库
@@ -179,3 +237,6 @@ git commit -m "abc"
 - [Commitizen 官方文档](https://github.com/commitizen/cz-cli)
 - [Conventional Commits 规范](https://www.conventionalcommits.org/)
 - [cz-conventional-changelog](https://github.com/commitizen/cz-conventional-changelog)
+- [conventional-changelog](https://github.com/conventional-changelog/conventional-changelog)
+- [Husky](https://github.com/typicode/husky)
+- [commitlint](https://github.com/conventional-changelog/commitlint)
