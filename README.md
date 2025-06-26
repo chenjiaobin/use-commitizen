@@ -92,6 +92,75 @@ feat: 添加用户登录功能
 Closes #123
 ```
 
+## 🛡️ 提交校验自动化（Husky + Commitlint）
+
+为保证所有提交信息都符合规范，项目集成了[husky](https://typicode.github.io/husky/#/)和[commitlint](https://commitlint.js.org/)。
+
+### 依赖安装
+
+```bash
+npm install --save-dev husky @commitlint/cli @commitlint/config-conventional
+```
+
+### 初始化husky
+
+```bash
+npm run prepare
+```
+此命令会自动创建`.husky`目录。
+
+### 添加commit-msg钩子
+
+```bash
+npx husky add .husky/commit-msg "npx --no -- commitlint --edit $1"
+```
+> 也可以手动在`.husky/commit-msg`文件中写入：
+> ```sh
+> #!/usr/bin/env sh
+> npx --no -- commitlint --edit $1
+> ```
+
+### 添加commitlint配置
+
+在项目根目录新建`commitlint.config.js`，内容如下：
+```js
+module.exports = {
+  extends: ['@commitlint/config-conventional'],
+  rules: {
+    'type-enum': [2, 'always', [
+      'feat', 'fix', 'docs', 'style', 'refactor', 'perf', 'test', 'chore', 'revert', 'ci', 'build'
+    ]],
+    'type-case': [2, 'always', 'lowerCase'],
+    'type-empty': [2, 'never'],
+    'subject-case': [2, 'always', 'lowerCase'],
+    'subject-empty': [2, 'never'],
+    'subject-full-stop': [2, 'never', '.'],
+    'header-max-length': [2, 'always', 72]
+  }
+};
+```
+
+### package.json相关配置
+
+```json
+"scripts": {
+  "prepare": "husky"
+},
+"devDependencies": {
+  "husky": "^9.x.x",
+  "@commitlint/cli": "^19.x.x",
+  "@commitlint/config-conventional": "^19.x.x"
+}
+```
+
+### 提交校验效果
+
+当你执行如下命令提交时：
+```bash
+git commit -m "abc"
+```
+会被自动拦截并提示格式错误，只有符合规范的提交信息才能成功提交。
+
 ## 🤝 贡献指南
 
 1. Fork 本仓库
